@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Generador de paletas de colores para juegos 2025. Crea paletas personalizadas gratis para pixel art, UI o temas, con exportación PNG/JSON.">
+    <meta name="keywords" content="color palette generator, game dev color tool, pixel art palette, UI color creator, gamedev tools 2025, free palette generator, color scheme maker">
+    <title>Generador de Paletas de Colores - Genio043 Tools 2025</title>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "¿Qué hace el Generador de Paletas de Colores?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Crea paletas de colores personalizadas para juegos, con opciones de estilo y exportación en PNG o JSON para pixel art o UI."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Es gratis el Generador de Paletas de Genio043?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Sí, es gratuito, online y diseñado para game devs indie en 2025."
+          }
+        }
+      ]
+    }
+    </script>
+    <style>
+        body { font-family: Arial, sans-serif; background: #1e1e1e; color: #ddd; text-align: center; margin: 20px; }
+        h1 { font-size: 28px; color: #00ccff; text-shadow: 0 0 10px #00ccff; }
+        .section { margin: 20px 0; padding: 15px; background: #2a2a2a; border-radius: 8px; }
+        label { display: block; margin: 5px 0; color: #bbb; }
+        input, select { padding: 8px; width: 200px; background: #333; color: #fff; border: 1px solid #444; border-radius: 4px; }
+        button { padding: 10px 20px; background: #00ccff; color: #fff; border: none; border-radius: 4px; cursor: pointer; margin: 5px; }
+        button:hover { background: #0099cc; }
+        #palette { margin: 20px; display: flex; justify-content: center; flex-wrap: wrap; }
+        .color-box { width: 100px; height: 100px; margin: 10px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 14px; color: #fff; text-shadow: 0 0 5px #000; }
+        footer { background: #2a2a2a; padding: 15px 0px; text-align: center; position: relative; bottom: 0; width: 100%; border-top: 1px solid #00ccff; }
+        footer p { margin: 0; font-size: 16px; color: #bbb; }
+        footer a { color: #00ff99; text-decoration: none; font-weight: bold; transition: all 0.3s; }
+        footer a:hover { color: #1e1e1e; background: #00ff99; padding: 5px 10px; border-radius: 4px; box-shadow: 0 0 10px #00ff99; }
+        footer a:visited { color: #ff9900; }
+    </style>
+</head>
+<body>
+    <h1>Generador de Paletas de Colores</h1>
+    <p>Crea paletas personalizadas para pixel art, UI o temas de juego.</p>
+    <div class="section">
+        <label>Estilo:</label>
+        <select id="style">
+            <option value="warm">Cálido</option>
+            <option value="cool">Frío</option>
+            <option value="pastel">Pastel</option>
+            <option value="random">Aleatorio</option>
+        </select>
+        <label>Cantidad de colores:</label>
+        <input type="number" id="count" min="2" max="8" value="5">
+        <button onclick="generatePalette()">Generar</button>
+        <button onclick="exportJSON()">Exportar JSON</button>
+        <button onclick="exportPNG()">Exportar PNG</button>
+    </div>
+    <div id="palette"></div>
+    <footer><p>Volver a <a href="https://genio043.github.io/">Genio043 Tools</a></p></footer>
+    <script>
+        function generatePalette() {
+            const style = document.getElementById("style").value;
+            const count = parseInt(document.getElementById("count").value);
+            const colors = [];
+
+            for (let i = 0; i < count; i++) {
+                let hue, saturation, lightness;
+                if (style === "warm") {
+                    hue = Math.random() * 60; // Rojos a amarillos
+                    saturation = 70 + Math.random() * 30;
+                    lightness = 50 + Math.random() * 20;
+                } else if (style === "cool") {
+                    hue = 180 + Math.random() * 60; // Azules a verdes
+                    saturation = 70 + Math.random() * 30;
+                    lightness = 50 + Math.random() * 20;
+                } else if (style === "pastel") {
+                    hue = Math.random() * 360;
+                    saturation = 30 + Math.random() * 20;
+                    lightness = 70 + Math.random() * 20;
+                } else {
+                    hue = Math.random() * 360;
+                    saturation = Math.random() * 100;
+                    lightness = Math.random() * 100;
+                }
+                const color = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+                colors.push(color);
+            }
+
+            displayPalette(colors);
+            return colors;
+        }
+
+        function displayPalette(colors) {
+            const palette = document.getElementById("palette");
+            palette.innerHTML = "";
+            colors.forEach(color => {
+                const hex = hslToHex(color);
+                const div = document.createElement("div");
+                div.className = "color-box";
+                div.style.backgroundColor = color;
+                div.textContent = hex;
+                palette.appendChild(div);
+            });
+        }
+
+        function hslToHex(hsl) {
+            const [h, s, l] = hsl.match(/\d+(\.\d+)?/g).map(Number);
+            const lNorm = l / 100;
+            const a = s / 100 * Math.min(lNorm, 1 - lNorm);
+            const f = n => {
+                const k = (n + h / 30) % 12;
+                const color = lNorm - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+                return Math.round(255 * color).toString(16).padStart(2, "0");
+            };
+            return `#${f(0)}${f(8)}${f(4)}`;
+        }
+
+        function exportJSON() {
+            const colors = generatePalette();
+            const hexColors = colors.map(hslToHex);
+            const data = { palette: hexColors };
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "palette.json";
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function exportPNG() {
+            const colors = generatePalette();
+            const canvas = document.createElement("canvas");
+            canvas.width = colors.length * 50;
+            canvas.height = 50;
+            const ctx = canvas.getContext("2d");
+            colors.forEach((color, i) => {
+                ctx.fillStyle = color;
+                ctx.fillRect(i * 50, 0, 50, 50);
+            });
+            const a = document.createElement("a");
+            a.href = canvas.toDataURL("image/png");
+            a.download = "palette.png";
+            a.click();
+        }
+    </script>
+</body>
+</html>
