@@ -133,20 +133,39 @@
                 const ctx = canvas.getContext("2d");
                 ctx.drawImage(img, 0, 0);
                 const imageData = ctx.getImageData(0, 0, img.width, img.height).data;
-                const colors = [];
+                const colorMap = new Map();
+                const colors = new Set();
 
-                const step = Math.floor(imageData.length / (count * 4));
-                for (let i = 0; i < imageData.length; i += step * 4) {
+                // Contar frecuencia de colores
+                for (let i = 0; i < imageData.length; i += 4) {
                     const r = imageData[i];
                     const g = imageData[i + 1];
                     const b = imageData[i + 2];
                     const hex = rgbToHex(r, g, b);
-                    if (colors.length < count) colors.push(hex);
-                    else break;
+                    colorMap.set(hex, (colorMap.get(hex) || 0) + 1);
                 }
 
-                displayPalette(colors);
-                return colors;
+                // Ordenar por frecuencia y tomar los más comunes
+                const sortedColors = [...colorMap.entries()]
+                    .sort((a, b) => b[1] - a[1])
+                    .slice(0, count)
+                    .map(entry => entry[0]);
+
+                // Si no hay suficientes, añadir más aleatorios únicos
+                if (sortedColors.length < count) {
+                    const step = Math.floor(imageData.length / (count * 4));
+                    for (let i = 0; i < imageData.length && sortedColors.length < count; i += step * 4) {
+                        const r = imageData[i];
+                        const g = imageData[i + 1];
+                        const b = imageData[i + 2];
+                        const hex = rgbToHex(r, g, b);
+                        if (!sortedColors.includes(hex)) sortedColors.push(hex);
+                    }
+                }
+
+                const finalColors = sortedColors.slice(0, count);
+                displayPalette(finalColors);
+                return finalColors;
             };
             img.src = URL.createObjectURL(image);
         }
