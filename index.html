@@ -13,7 +13,7 @@
       "mainEntity": [
         {
           "@type": "Question",
-          "name": "¿Qué hace el Generador de Paletas de Colores?",
+          "name": "¿Qué hace el today?",
           "acceptedAnswer": {
             "@type": "Answer",
             "text": "Crea paletas personalizadas o extrae colores de imágenes para juegos, con exportación en PNG o JSON para pixel art o UI."
@@ -38,6 +38,7 @@
         input, select { padding: 8px; width: 200px; background: #333; color: #fff; border: 1px solid #444; border-radius: 4px; }
         button { padding: 10px 20px; background: #00ccff; color: #fff; border: none; border-radius: 4px; cursor: pointer; margin: 5px; }
         button:hover { background: #0099cc; }
+        button:disabled { background: #666; cursor: not-allowed; }
         .form-group { margin-bottom: 15px; }
         .button-group { margin-top: 15px; }
         #palette { margin: 20px; display: flex; justify-content: center; flex-wrap: wrap; }
@@ -69,15 +70,17 @@
         </div>
         <div class="button-group">
             <button onclick="generatePalette()">Generar</button>
-            <button onclick="exportJSON()">Exportar JSON</button>
-            <button onclick="exportPNG()">Exportar PNG</button>
-            <button onclick="resetForm()">Reestablecer</button>
+            <button id="exportJsonBtn" onclick="exportJSON()" disabled>Exportar JSON</button>
+            <button id="exportPngBtn" onclick="exportPNG()" disabled>Exportar PNG</button>
+            <button id="resetBtn" onclick="resetForm()" disabled>Reestablecer</button>
             <p><a href="https://ko-fi.com/genio043" target="_blank">Cómprame un té</a></p>
         </div>
     </div>
     <div id="palette"></div>
     <footer><p>Volver a <a href="https://genio043.github.io/">Genio043 Tools</a></p></footer>
     <script>
+        let currentColors = [];
+
         function generatePalette() {
             const style = document.getElementById("style").value;
             const count = parseInt(document.getElementById("count").value);
@@ -113,9 +116,9 @@
                     colors.add(color);
                 }
 
-                const uniqueColors = Array.from(colors).slice(0, count);
-                displayPalette(uniqueColors);
-                return uniqueColors;
+                currentColors = Array.from(colors).slice(0, count);
+                displayPalette(currentColors);
+                enableButtons();
             }
         }
 
@@ -161,11 +164,17 @@
                     if (isUnique) colors.add(hex);
                 }
 
-                const finalColors = Array.from(colors).slice(0, count);
-                displayPalette(finalColors);
-                return finalColors;
+                currentColors = Array.from(colors).slice(0, count);
+                displayPalette(currentColors);
+                enableButtons();
             };
             img.src = URL.createObjectURL(image);
+        }
+
+        function enableButtons() {
+            document.getElementById("exportJsonBtn").disabled = false;
+            document.getElementById("exportPngBtn").disabled = false;
+            document.getElementById("resetBtn").disabled = false;
         }
 
         function resetForm() {
@@ -173,6 +182,10 @@
             document.getElementById("count").value = "5";
             document.getElementById("image").value = "";
             document.getElementById("palette").innerHTML = "";
+            currentColors = [];
+            document.getElementById("exportJsonBtn").disabled = true;
+            document.getElementById("exportPngBtn").disabled = true;
+            document.getElementById("resetBtn").disabled = true;
         }
 
         function hexToRgb(hex) {
@@ -210,8 +223,7 @@
         }
 
         function exportJSON() {
-            const colors = generatePalette();
-            const hexColors = colors.map(c => c.startsWith("#") ? c : hslToHex(c));
+            const hexColors = currentColors.map(c => c.startsWith("#") ? c : hslToHex(c));
             const data = { palette: hexColors };
             const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
             const url = URL.createObjectURL(blob);
@@ -223,12 +235,11 @@
         }
 
         function exportPNG() {
-            const colors = generatePalette();
             const canvas = document.createElement("canvas");
-            canvas.width = colors.length * 50;
+            canvas.width = currentColors.length * 50;
             canvas.height = 50;
             const ctx = canvas.getContext("2d");
-            colors.forEach((color, i) => {
+            currentColors.forEach((color, i) => {
                 ctx.fillStyle = color;
                 ctx.fillRect(i * 50, 0, 50, 50);
             });
