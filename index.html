@@ -74,35 +74,55 @@
         function generatePalette() {
             const style = document.getElementById("style").value;
             const count = parseInt(document.getElementById("count").value);
-            const colors = [];
-
-            for (let i = 0; i < count; i++) {
-                let hue, saturation, lightness;
-                if (style === "warm") {
-                    hue = Math.random() * 60; // Rojos a amarillos
-                    saturation = 70 + Math.random() * 30;
-                    lightness = 50 + Math.random() * 20;
-                } else if (style === "cool") {
-                    hue = 180 + Math.random() * 60; // Azules a verdes
-                    saturation = 70 + Math.random() * 30;
-                    lightness = 50 + Math.random() * 20;
-                } else if (style === "pastel") {
-                    hue = Math.random() * 360;
-                    saturation = 30 + Math.random() * 20;
-                    lightness = 70 + Math.random() * 20;
-                } else {
-                    hue = Math.random() * 360;
-                    saturation = Math.random() * 100;
-                    lightness = Math.random() * 100;
+            const image = document.getElementById("image").files[0];
+            
+            if (image) {
+                extractColorsFromImage(image, count);
+            } else {
+                const colors = new Set();
+                const maxAttempts = count * 20;
+                const usedHues = new Set(); // Para evitar hues cercanos
+        
+                while (colors.size < count && colors.size < maxAttempts) {
+                    let hue, saturation, lightness;
+                    if (style === "warm") {
+                        hue = getUniqueHue(usedHues, 0, 90, 15); // Mínimo 15° de diferencia
+                        saturation = 60 + Math.random() * 40;
+                        lightness = 40 + Math.random() * 40;
+                    } else if (style === "cool") {
+                        hue = getUniqueHue(usedHues, 160, 240, 20); // Mínimo 20°
+                        saturation = 60 + Math.random() * 40;
+                        lightness = 40 + Math.random() * 40;
+                    } else if (style === "pastel") {
+                        hue = getUniqueHue(usedHues, 0, 360, 30); // Mínimo 30°
+                        saturation = 20 + Math.random() * 30;
+                        lightness = 70 + Math.random() * 25;
+                    } else {
+                        hue = getUniqueHue(usedHues, 0, 360, 40); // Aleatorio con 40°
+                        saturation = Math.random() * 100;
+                        lightness = Math.random() * 100;
+                    }
+                    const color = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+                    colors.add(color);
                 }
-                const color = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
-                colors.push(color);
+        
+                const uniqueColors = Array.from(colors).slice(0, count);
+                displayPalette(uniqueColors);
+                return uniqueColors;
             }
-
-            displayPalette(colors);
-            return colors;
         }
-
+        
+        function getUniqueHue(usedHues, min, max, minDiff) {
+            let hue;
+            let attempts = 0;
+            do {
+                hue = min + Math.random() * (max - min);
+                attempts++;
+                if (attempts > 50) break; // Evitar bucle infinito
+            } while (Array.from(usedHues).some(h => Math.abs(h - hue) < minDiff));
+            usedHues.add(hue);
+            return hue;
+        }
         function displayPalette(colors) {
             const palette = document.getElementById("palette");
             palette.innerHTML = "";
