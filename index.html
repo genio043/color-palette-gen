@@ -111,7 +111,34 @@
                 return uniqueColors;
             }
         }
+
+        function extractColorsFromImage(image, count) {
+            const img = new Image();
+            img.onload = () => {
+                const canvas = document.createElement("canvas");
+                canvas.width = img.width;
+                canvas.height = img.height;
+                const ctx = canvas.getContext("2d");
+                ctx.drawImage(img, 0, 0);
+                const imageData = ctx.getImageData(0, 0, img.width, img.height).data;
+                const colors = [];
         
+                // Muestreo simple: tomar colores cada N píxeles
+                const step = Math.floor(imageData.length / (count * 4));
+                for (let i = 0; i < imageData.length; i += step * 4) {
+                    const r = imageData[i];
+                    const g = imageData[i + 1];
+                    const b = imageData[i + 2];
+                    const hex = rgbToHex(r, g, b);
+                    if (colors.length < count) colors.push(hex);
+                    else break;
+                }
+        
+                displayPalette(colors);
+                return colors;
+            };
+            img.src = URL.createObjectURL(image);
+        }
         function getUniqueHue(usedHues, min, max, minDiff) {
             let hue;
             let attempts = 0;
