@@ -57,7 +57,32 @@ Este proyecto está bajo la Licencia MIT (LICENSE). Siéntete libre de usarlo, m
 Desarrollado por Genio043 (Daniel Delgado).  
 ¿Te fue útil? ¡Considera invitarme un té! [Buy Me a Coffee](https://buymeacoffee.com/genio043).
 
+Instrucciones para usarlo
+Haz clic dentro del bloque de código de arriba.
+
+Presiona Ctrl+A (o Cmd+A en Mac) para seleccionar todo el texto.
+
+Presiona Ctrl+C (o Cmd+C) para copiarlo.
+
+Abre un editor de texto o el editor de GitHub en tu repositorio del Generador de Paleta de Colores.
+
+Crea un nuevo archivo llamado README.md en la raíz del repositorio (por ejemplo, color-palette-generator/README.md).
+
+Pega el texto con Ctrl+V (o Cmd+V).
+
+Ajusta los enlaces según sea necesario:
+Cambia https://github.com/genio043/color-palette-generator.git por la URL real de tu repositorio en GitHub.
+
+Actualiza https://genio043.github.io/color-palette-generator/ si lo subes a una URL diferente (por ejemplo, si no usas GitHub Pages o cambias el nombre del repositorio).
+
+Guarda y sube el archivo al repositorio con:
+
+git add README.md
+git commit -m "Añadir README.md"
+git push origin main
+
 ## Contacto
 Si tienes preguntas o sugerencias, contáctame en:  
 - Web: [danieldelgado.tech](https://danieldelgado.tech)  
 - GitHub: [genio043](https://github.com/genio043)
+
