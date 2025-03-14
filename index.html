@@ -3,29 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Generador de paletas de colores para juegos 2025. Crea paletas personalizadas o desde imágenes, gratis con exportación PNG/JSON.">
+    <meta name="description" content="Color palette generator for games 2025. Create custom palettes or extract colors from images, free with PNG/JSON export.">
     <meta name="keywords" content="color palette generator, game dev color tool, pixel art palette, UI color creator, gamedev tools 2025, free palette generator, image to palette">
     <meta name="google-adsense-account" content="ca-pub-0463493221079646">
-    <title>Generador de Paletas de Colores - Genio043 Tools 2025</title>
-    <script type="application/ld+json">
+    <title>Color Palette Generator - Genio043's Tools 2025</title>
+        <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "FAQPage",
       "mainEntity": [
         {
           "@type": "Question",
-          "name": "¿Qué hace el today?",
+          "name": "What does the Color Palette Generator do?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Crea paletas personalizadas o extrae colores de imágenes para juegos, con exportación en PNG o JSON para pixel art o UI."
+            "text": "It creates custom palettes or extracts colors from images for games, with PNG or JSON export for pixel art or UI."
           }
         },
         {
           "@type": "Question",
-          "name": "¿Es gratis el Generador de Paletas de Genio043?",
+          "name": "Is the Genio043 Color Palette Generator free?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Sí, es gratuito, online y diseñado para game devs indie en 2025."
+            "text": "Yes, it is free, online, and designed for indie game developers in 2025."
           }
         }
       ]
@@ -53,32 +53,32 @@
     </style>
 </head>
 <body>
-    <h1>Generador de Paletas de Colores</h1>
-    <p>Crea paletas personalizadas o subí una imagen para extraer colores.</p>
+    <h1>Color Palette Generator</h1>
+    <p>Create custom palettes or upload an image to extract colors.</p>
     <div class="section">
         <div class="form-group">
-            <label>Estilo:</label>
+            <label>Style:</label>
             <select id="style">
-                <option value="warm">Cálido</option>
-                <option value="cool">Frío</option>
+                <option value="warm">Warm</option>
+                <option value="cool">Cool</option>
                 <option value="pastel">Pastel</option>
-                <option value="random">Aleatorio</option>
+                <option value="random">Random</option>
             </select>
-            <label>Cantidad de colores:</label>
+            <label>Number of colors:</label>
             <input type="number" id="count" min="2" max="8" value="5">
-            <label>Subir imagen (opcional):</label>
+            <label>Upload image (optional):</label>
             <input type="file" id="image" accept="image/png, image/jpeg">
         </div>
         <div class="button-group">
             <button onclick="generatePalette()">Generar</button>
-            <button id="exportJsonBtn" onclick="exportJSON()" disabled>Exportar JSON</button>
-            <button id="exportPngBtn" onclick="exportPNG()" disabled>Exportar PNG</button>
-            <button id="resetBtn" onclick="resetForm()" disabled>Reestablecer</button>
-            <p><a href="https://buymeacoffee.com/genio043" target="_blank">Cómprame un té</a></p>
+            <button id="exportJsonBtn" onclick="exportJSON()" disabled>Export JSON</button>
+            <button id="exportPngBtn" onclick="exportPNG()" disabled>Export PNG</button>
+            <button id="resetBtn" onclick="resetForm()" disabled>Reset</button>
+            <p><a href="https://buymeacoffee.com/genio043" target="_blank">Buy me a tea</a></p>
         </div>
     </div>
     <div id="palette"></div>
-    <footer><p>Volver a <a href="https://genio043.github.io/">Genio043 Tools</a></p></footer>
+    <footer><p>Back to <a href="https://genio043.github.io/">Genio043's Tools</a></p></footer>
     <script>
         let currentColors = [];
 
